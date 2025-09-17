@@ -6,19 +6,10 @@
 }
 
 
-.AttributeValues <- function(database, atrribute){
+.AttributeValues <- function(database, attribute){
   
-  attribute_vals <- sapply(database, function(col){
-    
-    att <- attr(col, attribute)
-    
-    if(is.null(att)){
-      att = NA
-    }
-    
-    return(att)
-    
-  })
+  attribute_vals <- sapply(database, function(col) attr(col,attribute)) |>
+    Reduce(f = "c")
   
   return(attribute_vals)
 }
@@ -26,9 +17,12 @@
 
 .ColumnFromAttribute <- function(database, attribute, value){
   
+  col_att <- .ColumnsWithAttributes(database = database)
+  
   att_vals <- .AttributeValues(database, attribute)
   
- return(which(att_vals == value))
+
+ return(col_att[which(att_vals == value)] )
   
 }
 
