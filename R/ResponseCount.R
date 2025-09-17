@@ -9,9 +9,11 @@
 
 ResponseCount <- function(database, response){
   
-  name <- attr(db_response, "name")
+
   db_response <- database[,response]
-  
+
+  name <- attr(db_response, "name")
+    
   n <- sum(!is.na(db_response))
   
   values <- attr(db_response, "value")
