@@ -255,7 +255,7 @@ LoadDatabaseInR <- function(dataset_path) {
   
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Current, "value") <- c(
     "Intrinsic value as input","Intrinsic value as output","Instrumental value as input",
-    "Instrumental value as output","Cultural value as output","Cultural value as output"
+    "Instrumental value as output","Cultural value as input","Cultural value as output"
   )
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Current, "name") <- "Reflect diverse NFF values (current)"
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Current, "question") <- 
@@ -264,7 +264,7 @@ LoadDatabaseInR <- function(dataset_path) {
   
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Aspirational, "value") <- c(
     "Intrinsic value as input","Intrinsic value as output","Instrumental value as input",
-    "Instrumental value as output","Cultural value as output","Cultural value as output"
+    "Instrumental value as output","Cultural value as input","Cultural value as output"
   )
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Aspirational, "name") <- "Reflect diverse NFF values (aspirational)"
   attr(questionnaires$QA.Reflect_diverse_NFF_values_Aspirational, "question") <- 
