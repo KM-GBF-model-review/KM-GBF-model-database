@@ -1,28 +1,78 @@
 library(shiny)
+library(plotly)
+library(shinyWidgets)
+library(gt)
 
-ui <- fluidPage(
-  sliderInput("x", "If x is", min = 1, max = 50, value = 30),
-  sliderInput("y", "and y is", min = 1, max = 50, value = 5),
-  "then, (x * y) is", textOutput("product"),
-  "and, (x * y) + 5 is", textOutput("product_plus5"),
-  "and (x * y) + 10 is", textOutput("product_plus10")
+targets::tar_source("../R")
+
+db <- LoadDatabaseInR("../input/Merged_Dataset_KMGBF_26Aug.xlsx")
+name_choices <- .AttributeValues(database = db, attribute = "name") |>
+  na.omit() |>
+  as.character()
+
+ui <- navbarPage(
+  title = "KM-GBF Model Explorer",
+  
+  # ---- Page 1: Model Descriptives ----
+  tabPanel("Model Descriptives",
+           sidebarLayout(
+             sidebarPanel(
+               selectInput(inputId = "question", 
+                           label = "KM-GBF Question", 
+                           choices = name_choices)
+             ),
+             mainPanel(
+               plotOutput("plot", width = "800px", height = "600px")
+             )
+           )
+  ),
+  
+  # ---- Page 2: Model Table ----
+  tabPanel("Model Table",
+           sidebarLayout(
+             sidebarPanel(
+               pickerInput(inputId = "table_question", 
+                           label = "KM-GBF Question", 
+                           choices = name_choices,
+                           multiple = TRUE,
+                           options = list(`actions-box` = TRUE,
+                                          `none-selected-text` = "Please make a selection!"))
+             ),
+             mainPanel(
+               gt_output("model_table")
+             )
+           )
+  )
 )
 
 server <- function(input, output, session) {
   
-  product <- reactive({
-    as.numeric(input$x * input$y)
+  plot_response <- reactive({
+    .ColumnFromAttribute(database = db,
+                         attribute = "name",
+                         value = input$question)
   })
   
-  output$product <- renderText({ 
-    product()
+  # ---- Page 1: Plot ----
+  output$plot <- renderPlot({
+    plot(ResponseCount(database = db, response = plot_response()))
   })
-  output$product_plus5 <- renderText({ 
-    product() + 5
+  
+  
+  table_responses <- reactive({
+    purrr::map_vec(input$table_question, .f = function(x){
+      .ColumnFromAttribute(database = db,
+                           attribute = "name",
+                           value = x)
+    })
   })
-  output$product_plus10 <- renderText({ 
-    product() + 10
+  
+  # ---- Page 2: Table ----
+  output$model_table <- render_gt({
+    # Example: show the raw data for the selected question
+    ColouredBinaryTable(database = db, response = table_responses())
   })
+  
 }
 
 shinyApp(ui, server)
