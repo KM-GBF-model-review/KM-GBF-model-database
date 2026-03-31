@@ -1,0 +1,127 @@
+---
+title: "Exploring the KM-GBF model database"
+author: "Patrick Alexander Walkden"
+format: html
+editor: visual
+---
+
+## Exploring the KM-GBF model database
+
+This is a walk through of how to explore the KM-GBF model database at xxxx.
+
+## Loading in the database
+
+You can load the database in with the function *LoadDatabaseinR*
+
+```{r}
+targets::tar_source("../R")
+model_database <- LoadDatabaseInR(dataset_path = "../input/Merged_Dataset_KMGBF_16Oct25.xlsx")
+
+
+```
+
+## What variables can we visualize?
+
+Not all questions lend themselves easily to visualisations so when exploring the database it is good to know which columns contain information that we can plot.
+
+```{r}
+
+visual_columns <- .ColumnsWithAttributes(model_database)
+
+head(visual_columns)
+
+visual_columns
+```
+
+It is through these columns that we can go and explore the database
+
+## Metadata figures
+
+```{r}
+
+Realm <- ResponseCount(database = model_database,
+              response = visual_columns[3], radial = TRUE)
+
+
+ggplot2::ggsave(Realm,filename = "../outputs/figures/metadata/realm.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+Drivers <- ResponseCount(database = model_database,
+              response = visual_columns[7], radial = TRUE)
+
+
+ggplot2::ggsave(Drivers,filename = "../outputs/figures/metadata/drivers.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+Domain <- ResponseCount(database = model_database,
+              response = visual_columns[1], radial = TRUE)
+
+
+ggplot2::ggsave(Domain,filename = "../outputs/figures/metadata/domain.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+NFF <- ResponseCount(database = model_database,
+              response = visual_columns[39], radial = TRUE)
+
+
+ggplot2::ggsave(NFF,filename = "../outputs/figures/metadata/NFF.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+Goals <- ResponseCount(database = model_database,
+              response = visual_columns[29], radial = TRUE)
+
+
+ggplot2::ggsave(Goals,filename = "../outputs/figures/metadata/kmgbf_goals.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+Targets <- ResponseCount(database = model_database,
+              response = visual_columns[31], radial = TRUE)
+
+
+ggplot2::ggsave(Targets,filename = "../outputs/figures/metadata/kmgbf_targets.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+```
+
+```{r}
+
+Realm <- ResponseCount(database = model_database,
+              response = visual_columns[3])
+
+Realm
+ggplot2::ggsave(Realm,filename = "../outputs/figures/metadata/realm_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+Drivers <- ResponseCount(database = model_database,
+              response = visual_columns[7])
+
+
+ggplot2::ggsave(Drivers,filename = "../outputs/figures/metadata/drivers_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+Domain <- ResponseCount(database = model_database,
+              response = visual_columns[1])
+
+
+ggplot2::ggsave(Domain,filename = "../outputs/figures/metadata/domain_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+NFF <- ResponseCount(database = model_database,
+              response = visual_columns[39])
+
+
+ggplot2::ggsave(NFF,filename = "../outputs/figures/metadata/NFF_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+Goals <- ResponseCount(database = model_database,
+              response = visual_columns[29])
+
+
+ggplot2::ggsave(Goals,filename = "../outputs/figures/metadata/kmgbf_goals_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+Targets <- ResponseCount(database = model_database,
+              response = visual_columns[31])
+
+
+ggplot2::ggsave(Targets,filename = "../outputs/figures/metadata/kmgbf_targets_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+```
+
+![](http://127.0.0.1:30105/chunk_output/7516F094470f9ab7/184AEB37/cqwfjyr1ytg64/000010.png)

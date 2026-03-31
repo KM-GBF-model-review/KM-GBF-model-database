@@ -279,5 +279,20 @@ LoadDatabaseInR <- function(dataset_path) {
     questions[which(colnames(questionnaires) == "Application_Use.Informed_Policy")]
   
   
+  attr(questionnaires$QA_Questionnaire_validation.Validated, "value") <- c("Yes", "No")
+  attr(questionnaires$QA_Questionnaire_validation.Validated, "name") <- "Quality assurance - Validated"
+  attr(questionnaires$QA_Questionnaire_validation.Validated, "question") <- 
+    questions[which(colnames(questionnaires) == "QA_Questionnaire_validation.Validated")]
+  
+
+  
+  
+  attr(questionnaires$QA_Questionnaire_validation.Additional_questions, "value") <- c("Yes", "No")
+  attr(questionnaires$QA_Questionnaire_validation.Additional_questions, "name") <- "Quality assurance - Second round"
+  attr(questionnaires$QA_Questionnaire_validation.Additional_questions, "question") <- 
+    questions[which(colnames(questionnaires) == "QA_Questionnaire_validation.Additional_questions")]
+  
+  
+  
   return(questionnaires)
 }

@@ -2,15 +2,10 @@
 ColouredBinaryTable <- function(database, responses, question = FALSE){
   
   
-  col_colours <- wesanderson::wes_palette(name = "AsteroidCity1", n = length(responses), type = "discrete")
+  col_colours <- wesanderson::wes_palette(name = "AsteroidCity1", n = length(responses), type = "continuous")
   
-  response_values <- purrr::map(responses, .f = function(x){
-    
-    attr(database[,x], "value")
-    
-  }) |>
-    Reduce(f = "c") |>
-    unique()
+
+  
   
   
   response_lengths <- purrr::map_vec(responses, .f = function(x){
@@ -45,7 +40,7 @@ for(i in 1:nrow(db_response)){
     next()
   }
     
-  mat[i,as.numeric(stringr::str_split_1(db_response[i,response], pattern = ","))] <- 
+  mat[i,as.numeric(stringr::str_split_1(as.character(db_response[i,response]), pattern = ","))] <- 
     1
 }
   
@@ -67,7 +62,7 @@ for(i in 1:nrow(db_response)){
                   locations = gt::cells_body()) |>
     gt::data_color(
       columns = 1,
-      palette = "grey50",na_color = "white"
+      palette = "white",na_color = "white"
     ) |>
     gt::cols_label(
       gt::starts_with("Model") ~ gt::md(glue::glue("**Model**")) 
@@ -78,17 +73,25 @@ for(i in 1:nrow(db_response)){
 
 
 
+  response_values <- purrr::map(responses, .f = function(x){
+    
+    attr(database[,x], "value")
+    
+  }) |>
+    Reduce(f = "c") 
   
-for(vec in response_values){
+  col_labs <- colnames(tab_data)[-1]
+  
+for(i in 1:length(col_labs)){
     
     bin_table <- bin_table |>
       gt::cols_label(
-        gt::starts_with(vec) ~ gt::md(glue::glue("*{paste(vec)}*")) 
+        !!col_labs[i] := gt::md(glue::glue("*{paste(response_values[i])}*"))
       )
 }
+  
 
-
-k <- 2
+  k <- 2
   for(i in 1:length(response_lengths)){
     
     columns <- k:(k+(response_lengths[i] - 1))
@@ -107,7 +110,14 @@ k <- 2
     k <- k+response_lengths[i]
   }
   
-bin_table
+bin_table <- bin_table |>
+  # Set first column width to 150px
+  cols_width(
+    "Model" ~ px(150)  # Replace 'rowname' with your first column's name
+  )
+
+
+
   return(bin_table)
   
   
