@@ -1,0 +1,70 @@
+---
+title: "Exploring the KM-GBF model database"
+author: "Patrick Alexander Walkden"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+
+targets::tar_source("R")
+
+```
+
+## Constructing binary tables for review manuscript
+
+For the review manucript we want two binary table to show model-specifc responses to questions in the data. The table is a question x model matrix with filled in cells indicating that the model can inform the corresponding question.
+
+The first table will be for questions regarding scenario analysis capabilities, KM-GBF goals and targets, Nature Futures Framework and Detection and Attribution capabilitiies.
+
+The second table will be for broader questions surrounding the representation of models across domains, realms, drivers represented, whether the model is spatially explicit, how it is evaluated, calibrated and validated and whether it has been used to inform policy decisions.
+
+First things first: Load in database and identify the relevant columns we need.
+
+```{r load in database}
+
+# load in database
+model_database <- LoadDatabaseInR(dataset_path = "input/KMGBF-NFF model dataset_20260626.xlsx")
+
+bin_columns <- .ColumnsWithAttributes(model_database)
+
+head(bin_columns)
+
+table1_columns <- bin_columns[c(24,30,32,40,13,15,28,29,3)]
+
+ColouredBinaryTableFlextable(database = model_database,
+  responses = table1_columns,
+  question = TRUE,
+  save_xlsx = TRUE,
+  save_out = "outputs/review_ms/binary_tables/binary_table1.xlsx"
+)
+
+
+```
+
+```{r print table1}
+
+
+ColouredBinaryTableFlextable(database = model_database,
+  responses = table1_columns,
+  question = TRUE,
+  save_xlsx = FALSE,
+  save_out = "outputs/review_ms/binary_tables/binary_table1.xlsx"
+)
+```
+
+Next up we'll get the column IDs for the second table and then generate the table.
+
+```{r table2}
+
+table2_columns <- bin_columns[c(4,8,9,22,23,20,11,10,18,17,42)]
+
+ColouredBinaryTableFlextable(database = model_database,
+  responses = table2_columns,
+  question = TRUE,
+  save_xlsx = TRUE,
+  save_out = "outputs/review_ms/binary_tables/binary_table2.xlsx"
+)
+
+```

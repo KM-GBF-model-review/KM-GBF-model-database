@@ -43,6 +43,9 @@ vignettes/*.pdf
 docs/
 old_functions/
 outputs/
+misc/
+Files-Bernd/
+versions/
 
 # translation temp files
 po/*~

@@ -7,15 +7,15 @@ editor: visual
 
 ## Exploring the KM-GBF model database
 
-This is a walk through of how to explore the KM-GBF model database at xxxx.
+This is a walkthrough of how to explore the KM-GBF model database at xxxx.
 
 ## Loading in the database
 
 You can load the database in with the function *LoadDatabaseinR*
 
 ```{r}
-targets::tar_source("../R")
-model_database <- LoadDatabaseInR(dataset_path = "../input/Merged_Dataset_KMGBF_16Oct25.xlsx")
+targets::tar_source("R")
+        model_database <- LoadDatabaseInR(dataset_path = "input/KMGBF-NFF model dataset_20260626.xlsx")
 
 
 ```
@@ -35,93 +35,181 @@ visual_columns
 
 It is through these columns that we can go and explore the database
 
-## Metadata figures
+## Metadata figures - Review manuscript
+
+For the review manuscript we want to produce plots that demonstrate the representativness of the dataset in terms of how well the different models can inform the KM-GBF goals and targets, NFF value persepctives, scenario analysis capabilities etc.
+
+Here we have some functions that can display the metadata in a radar bar chart, also displaying the percentage of the models that fall into each category. 
 
 ```{r}
 
-Realm <- ResponseCount(database = model_database,
-              response = visual_columns[3], radial = TRUE)
+if(!dir.exists("outputs/review_ms/metadata")) {
+  dir.create("outputs/review_ms/metadata", recursive = TRUE)
+}
 
-
-ggplot2::ggsave(Realm,filename = "../outputs/figures/metadata/realm.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
-
-Drivers <- ResponseCount(database = model_database,
-              response = visual_columns[7], radial = TRUE)
-
-
-ggplot2::ggsave(Drivers,filename = "../outputs/figures/metadata/drivers.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
-
-
-Domain <- ResponseCount(database = model_database,
-              response = visual_columns[1], radial = TRUE)
-
-
-ggplot2::ggsave(Domain,filename = "../outputs/figures/metadata/domain.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
-
+# NFF value perspectives
 
 NFF <- ResponseCount(database = model_database,
-              response = visual_columns[39], radial = TRUE)
+              response = visual_columns[40], colour_bars = TRUE, radial = TRUE)
 
 
-ggplot2::ggsave(NFF,filename = "../outputs/figures/metadata/NFF.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(NFF,filename = "outputs/review_ms/metadata/NFF.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
 
+# Km-GBF goals
 
 Goals <- ResponseCount(database = model_database,
-              response = visual_columns[29], radial = TRUE)
+              response = visual_columns[30],colour_bars = TRUE, radial = TRUE)
 
 
-ggplot2::ggsave(Goals,filename = "../outputs/figures/metadata/kmgbf_goals.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Goals,filename = "outputs/review_ms/metadata/kmgbf_goals.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
 
+# KM-GBF Targets
 
 Targets <- ResponseCount(database = model_database,
-              response = visual_columns[31], radial = TRUE)
+              response = visual_columns[32], colour_bars = TRUE, radial = TRUE)
 
 
-ggplot2::ggsave(Targets,filename = "../outputs/figures/metadata/kmgbf_targets.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Targets,filename = "outputs/review_ms/metadata/kmgbf_targets.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+# Scenario analysis
+
+Scenario_analysis <- ResponseCount(database = model_database,
+              response = visual_columns[24], colour_bars = TRUE, radial = TRUE)
+
+
+ggplot2::ggsave(Scenario_analysis,filename = "outputs/review_ms/metadata/scenario_analysis.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+# Detection and attribution - Here this figure is a bit more bespoke but doable
+
+Detection_and_attribution <- ResponseCount(database = model_database,
+              response = visual_columns[15], colour_bars = TRUE, radial = TRUE)
+
+
+ggplot2::ggsave(Detection_and_attribution,filename = "outputs/review_ms/metadata/detection_and_attribution.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+# Methodological approach
+
+Approach <- ResponseCount(database = model_database,
+              response = visual_columns[12], colour_bars = TRUE, radial = TRUE)
+
+
+ggplot2::ggsave(Approach,filename = "outputs/review_ms/metadata/method_approach.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+# regional scale
+
+Scale <- ResponseCount(database = model_database,
+              response = visual_columns[3], colour_bars = TRUE, radial = TRUE)
+
+
+ggplot2::ggsave(Scale,filename = "outputs/review_ms/metadata/regional_scale.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
+
+
+
 
 ```
 
+## Metadata figures - data manuscript
+These figures are for the data paper again showing teh descriptive statistics but in a flat bar chart format.
+
+### Figure 1
+
 ```{r}
 
-Realm <- ResponseCount(database = model_database,
-              response = visual_columns[3])
+if(!dir.exists("outputs/db_ms/metadata")) {
+  dir.create("outputs/db_ms/metadata", recursive = TRUE)
+}
 
-Realm
-ggplot2::ggsave(Realm,filename = "../outputs/figures/metadata/realm_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+# Realm
+
+Realm <- ResponseCount(database = model_database,
+              response = visual_columns[4])
+
+
+
+ggplot2::ggsave(Realm,filename = "outputs/db_ms/metadata/realm_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+# Drivers
 
 Drivers <- ResponseCount(database = model_database,
-              response = visual_columns[7])
+              response = visual_columns[8])
 
 
-ggplot2::ggsave(Drivers,filename = "../outputs/figures/metadata/drivers_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Drivers,filename = "outputs/db_ms/metadata/drivers_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
 
+# Domain
 
 Domain <- ResponseCount(database = model_database,
+              response = visual_columns[2])
+
+
+ggplot2::ggsave(Domain,filename = "outputs/db_ms/metadata/domain_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+# Approach
+
+Approach <- ResponseCount(database = model_database,
+              response = visual_columns[12])
+
+
+ggplot2::ggsave(Approach,filename = "outputs/db_ms/metadata/method_approach_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+arranged_1 <- ggpubr::ggarrange(Domain, Realm,Drivers, Approach, ncol = 2, nrow = 2, align = "hv", common.legend = TRUE, legend = "none")
+
+
+ggplot2::ggsave(arranged_1,filename = "outputs/db_ms/metadata/figure_1.png",width = 70, height = 80,unit = "cm", dpi = 400,  device = "png")
+
+```
+
+
+### Figure 2
+
+```{r}
+
+
+Model_type <- ResponseCount(database = model_database,
               response = visual_columns[1])
 
 
-ggplot2::ggsave(Domain,filename = "../outputs/figures/metadata/domain_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Model_type,filename = "outputs/db_ms/metadata/type_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+Scenario_analysis <- ResponseCount(database = model_database,
+              response = visual_columns[24])
+
+
+ggplot2::ggsave(Scenario_analysis,filename = "outputs/db_ms/metadata/scenario_analysis_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
 
 
 NFF <- ResponseCount(database = model_database,
-              response = visual_columns[39])
+              response = visual_columns[40])
 
 
-ggplot2::ggsave(NFF,filename = "../outputs/figures/metadata/NFF_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(NFF,filename = "outputs/db_ms/metadata/NFF_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
 
 
 Goals <- ResponseCount(database = model_database,
-              response = visual_columns[29])
+              response = visual_columns[30])
 
 
-ggplot2::ggsave(Goals,filename = "../outputs/figures/metadata/kmgbf_goals_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Goals,filename = "outputs/db_ms/metadata/kmgbf_goals_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
 
 
 Targets <- ResponseCount(database = model_database,
-              response = visual_columns[31])
+              response = visual_columns[32])
 
 
-ggplot2::ggsave(Targets,filename = "../outputs/figures/metadata/kmgbf_targets_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+ggplot2::ggsave(Targets,filename = "outputs/db_ms/metadata/kmgbf_targets_flat.png",  device = "png", width = 35, height = 30, units = "cm", dpi = 400)
+
+
+
+
+
+
+
+
+arranged <- ggpubr::ggarrange(Model_type, Goals, NFF, Scenario_analysis, ncol = 2, nrow = 2, align = "hv", common.legend = TRUE, legend = "none")
+
+ggplot2::ggsave(arranged,filename = "outputs/db_ms/metadata/figure_2.png",width = 70, height = 80,units = "cm", dpi = 400,  device = "png")
+
 ```
-
-![](http://127.0.0.1:30105/chunk_output/7516F094470f9ab7/184AEB37/cqwfjyr1ytg64/000010.png)
