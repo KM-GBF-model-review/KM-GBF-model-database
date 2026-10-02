@@ -9,7 +9,7 @@ library(DT)
 targets::tar_source("R")
 
 db <- LoadDatabaseInR(
-  dataset_path = "input/KMGBF-NFF model dataset_20260626.xlsx"
+  dataset_path = "KMGBF-NFF dataset/KMGBF-NFF model dataset version 1.0_20250625.xlsx"
 )
 
 
