@@ -46,7 +46,7 @@ outputs/
 misc/
 Files-Bernd/
 versions/
-
+*.code-workspace
 # translation temp files
 po/*~
 
