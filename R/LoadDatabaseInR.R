@@ -4,7 +4,7 @@ LoadDatabaseInR <- function(dataset_path) {
     readxl::read_excel(
       dataset_path,
       sheet = "Dataset",
-      skip = 4,
+      skip = 3,
       .name_repair = "universal_quiet"
     )
   )

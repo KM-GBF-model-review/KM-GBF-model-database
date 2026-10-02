@@ -7,7 +7,7 @@ editor: visual
 
 ## Exploring the KM-GBF model database
 
-This is a walkthrough of how to explore the KM-GBF model database at xxxx.
+This is a walkthrough of how to explore the KM-GBF model database.
 
 ## Loading in the database
 
@@ -15,7 +15,7 @@ You can load the database in with the function *LoadDatabaseinR*
 
 ```{r}
 targets::tar_source("R")
-        model_database <- LoadDatabaseInR(dataset_path = "input/KMGBF-NFF model dataset_20260626.xlsx")
+        model_database <- LoadDatabaseInR(dataset_path = "KMGBF-NFF dataset/KMGBF-NFF model dataset version 1.0_20250625.xlsx")
 
 
 ```
@@ -39,7 +39,7 @@ It is through these columns that we can go and explore the database
 
 For the review manuscript we want to produce plots that demonstrate the representativness of the dataset in terms of how well the different models can inform the KM-GBF goals and targets, NFF value persepctives, scenario analysis capabilities etc.
 
-Here we have some functions that can display the metadata in a radar bar chart, also displaying the percentage of the models that fall into each category. 
+Here we have some functions that can display the metadata in a radar bar chart, also displaying the percentage of the models that fall into each category.
 
 ```{r}
 
@@ -65,6 +65,9 @@ ggplot2::ggsave(Goals,filename = "outputs/review_ms/metadata/kmgbf_goals.png",  
 
 # KM-GBF Targets
 
+attr(model_database[,visual_columns[32]], "value") <- paste0("T",1:23)
+
+
 Targets <- ResponseCount(database = model_database,
               response = visual_columns[32], colour_bars = TRUE, radial = TRUE)
 
@@ -80,9 +83,47 @@ Scenario_analysis <- ResponseCount(database = model_database,
 ggplot2::ggsave(Scenario_analysis,filename = "outputs/review_ms/metadata/scenario_analysis.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
 
 # Detection and attribution - Here this figure is a bit more bespoke but doable
+# Uses observations
+# detect changes in natures
+# detect changes in drivers
+# detection and attribution
+
+columns <- c(10,13,14,15)
+attr(model_database[,visual_columns[10]], "value")
+attr(model_database[,visual_columns[13]], "value")
+attr(model_database[,visual_columns[14]], "value")
+attr(model_database[,visual_columns[15]], "value")
+
+model_database$DA_meta <- c()
+
+for(i in seq_along(columns)){
+
+target_values <- which(attr(model_database[,visual_columns[columns[i]]], "value") %in% c("Yes","Not yet, but possible", "Possible, depending on model selection"))
+model_database$DA_meta[which(model_database[,visual_columns[columns[i]]] %in% target_values)] <- paste(model_database$DA_meta[which(model_database[,visual_columns[columns[i]]] %in% target_values)], i, sep = ",")
+
+}
+
+model_database$DA_meta <- stringr::str_remove(model_database$DA_meta, "^NA,")
+model_database$DA_meta <- ifelse(is.na(substr(model_database$DA_meta,1,1))|substr(model_database$DA_meta,1,1) == ",", substr(model_database$DA_meta,2,nchar(model_database$DA_meta)), model_database$DA_meta)
+
+
+
+
+attr(model_database$DA_meta, "value") <- c(
+    "Uses observations",
+    "Detect changes in natures",
+    "Detect changes in drivers",
+    "Detect changes in nature and attribute to drivers"
+  )
+
+  attr(
+    model_database$DA_meta,
+    "name"
+  ) <- "Detection and attribution"
+
 
 Detection_and_attribution <- ResponseCount(database = model_database,
-              response = visual_columns[15], colour_bars = TRUE, radial = TRUE)
+              response = "DA_meta", colour_bars = TRUE, radial = TRUE)
 
 
 ggplot2::ggsave(Detection_and_attribution,filename = "outputs/review_ms/metadata/detection_and_attribution.png",  device = "png", width = 30.5, height = 30, units = "cm", dpi = 400)
@@ -110,6 +151,7 @@ ggplot2::ggsave(Scale,filename = "outputs/review_ms/metadata/regional_scale.png"
 ```
 
 ## Metadata figures - data manuscript
+
 These figures are for the data paper again showing teh descriptive statistics but in a flat bar chart format.
 
 ### Figure 1
@@ -160,7 +202,6 @@ arranged_1 <- ggpubr::ggarrange(Domain, Realm,Drivers, Approach, ncol = 2, nrow 
 ggplot2::ggsave(arranged_1,filename = "outputs/db_ms/metadata/figure_1.png",width = 70, height = 80,unit = "cm", dpi = 400,  device = "png")
 
 ```
-
 
 ### Figure 2
 

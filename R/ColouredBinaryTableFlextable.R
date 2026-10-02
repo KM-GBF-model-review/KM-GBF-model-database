@@ -6,7 +6,7 @@ ColouredBinaryTableFlextable <- function(
   save_out = c()
 ) {
   database <- database |>
-    dplyr::filter(!(Name_of_the_model_with_acronym %in% c("EDv3", "ED2")))
+    dplyr::filter(!(Name_of_the_model_with_acronym %in% c("ED3", "ED2")))
 
   col_colours <- wesanderson::wes_palette(
     name = "AsteroidCity1",
